@@ -1,29 +1,63 @@
+#include <iostream>
+
 #include "Window.h"
 
-const static int width = 800, height = 800;
+Window *render_window;
 
-Window *renderWindow;
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int)
+int main()
 {
-    renderWindow = new Window(width, height, "render view", hInstance);
+    render_window = new Window("Software Renderer", 800, 800);
 
-    while (renderWindow->getMSG()->message != WM_QUIT)
+    int &width = render_window->width;
+    int &height = render_window->height;
+
+    int count = 0;
+
+    render_window->start_window(WindowProc);
+
+    std::cout << "starting window loop" << std::endl;
+
+    while (render_window->process_messages())
     {
-        while (PeekMessage(renderWindow->getMSG(), nullptr, 0, 0, PM_REMOVE))
-        {
-            TranslateMessage(renderWindow->getMSG());
-            DispatchMessage(renderWindow->getMSG());
-        }
+        render_window->background(0x000000);
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                renderWindow->set(x, y, 255, 0, 255);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+
+                uint8_t r = x % 80;
+                uint8_t g = y % 80;
+                uint8_t b = 128;
+                
+                render_window->set(x, y, r, g, b);
             }
         }
 
-        renderWindow->renderFrame();
+        render_window->render();
+        count++;
     }
 
-    return 0;
+    std::cout << "count: " << count << std::endl;
+}
+
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    int w = LOWORD(lParam);
+    int h = HIWORD(lParam);
+    switch (uMsg)
+    {
+    case WM_SIZE:
+        if (w != render_window->width || h != render_window->height)
+            render_window->resize(w, h);
+            break;
+    case WM_DESTROY:
+        std::cout << "bailing" << std::endl;
+        PostQuitMessage(0);
+        return 0;
+    }
+
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
