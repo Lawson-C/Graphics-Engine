@@ -7,7 +7,7 @@ Window::Window(const char *title, int width, int height) : width(width), height(
 {
     std::cout << "creating window " << title << " of size " << width << " x " << height << std::endl;
 
-    framebuffer = new uint32_t[width * height];
+    framebuffer = new color_t[width * height];
 
     std::cout << "frame buffer initialization " << ((framebuffer == nullptr) ? "failed" : "success") << std::endl;
 
@@ -103,7 +103,7 @@ void Window::render()
     ReleaseDC(hwnd, hdc);
 }
 
-void Window::background(uint32_t color)
+void Window::background(color_t color)
 {
     for (int i = 0; i < width * height; i++)
     {
@@ -117,7 +117,7 @@ bool Window::resize(int w, int h)
     this->height = h;
 
     delete[] framebuffer;
-    framebuffer = new uint32_t[w * h];
+    framebuffer = new color_t[w * h];
 
     bitmapInfo.bmiHeader.biWidth = w;
     bitmapInfo.bmiHeader.biHeight = -h;
