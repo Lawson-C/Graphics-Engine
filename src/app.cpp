@@ -2,14 +2,18 @@
 
 #include "display/Window.h"
 #include "display/Color.h"
+#include "geometry/Polygon.h"
+#include "Engine.h"
 
 Window *render_window;
+Engine *engine;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int main()
 {
     render_window = new Window("Software Renderer", 800, 800);
+    engine->attach_window(render_window);
 
     int &width = render_window->width;
     int &height = render_window->height;
@@ -22,23 +26,7 @@ int main()
 
     while (render_window->process_messages())
     {
-        render_window->background({0x000000});
-
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-
-                uint8_t r = x % 255;
-                uint8_t g = y % 255;
-                uint8_t b = 128;
-                
-                render_window->set(x, y, r, g, b);
-            }
-        }
-
-        render_window->render();
-        count++;
+        engine->render_scene();
     }
 
     std::cout << "count: " << count << std::endl;

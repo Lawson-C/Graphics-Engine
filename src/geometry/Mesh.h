@@ -1,18 +1,19 @@
 #pragma once
 
-#include<list>
-
 #include "Polygon.h"
+#include "PolygonList.h"
 
-class Mesh {
-    int polyCount;
-    PolygonItem *polychain;
-};
+class Mesh
+{
+private:
+    int poly_count;
+    PolygonList *polychain;
 
-/*
-* Each mesh is a linkedlist of polygons, which is a subsets of the engine's global mesh 
-*/
-struct PolygonItem {
-    Polygon *polygon;
-    PolygonItem *next;
+public:
+    Mesh();
+
+    inline void add_polygon(polygon_t *poly) { polychain->add(poly); }
+
+    inline polylistitem_t *get_head() {return polychain->head;};
+    inline polylistitem_t *get_tail() {return polychain->tail;};
 };

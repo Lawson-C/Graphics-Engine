@@ -14,3 +14,5 @@ public:
     inline Polygon(Vector3 &point0, Vector3 &point1, Vector3 &point2) : Point(new Vector3[]{point0, point1, point2}) {}
     inline ~Polygon() { delete[] Point; }
 };
+
+typedef class Polygon polygon_t;
