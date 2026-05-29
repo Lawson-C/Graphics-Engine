@@ -24,7 +24,7 @@ public:
     void set_normal(Vector3 &normal);
     void set_normal(double x, double y, double z);
 
-    void align_normal(int x, int y, int z);
+    void realign_normal(int x, int y, int z);
 };
 
 typedef class Polygon polygon_t;

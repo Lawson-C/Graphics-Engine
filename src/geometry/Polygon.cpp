@@ -59,7 +59,6 @@ color_t Polygon::get_color(Vector3 &point)
     return u * texture[0] + v * texture[1] + w * texture[2];
 }
 
-// Barycentric interpolation between the three vertex colors based on the position of the point within the triangle
 color_t Polygon::get_color(double x, double y, double z)
 {
     Vector3 p(x, y, z);
@@ -79,9 +78,9 @@ void Polygon::set_normal(double x, double y, double z)
     normal.normalize();
 }
 
-void Polygon::align_normal(int x, int y, int z)
+void Polygon::realign_normal(int x, int y, int z)
 {
-    normal.x *= (x >= 0) * 2 - 1;
-    normal.y *= (y >= 0) * 2 - 1;
-    normal.z *= (z >= 0) * 2 - 1;
+    normal.x *= (x >> 31) | 1;
+    normal.y *= (y >> 31) | 1;
+    normal.z *= (z >> 31) | 1;
 }
