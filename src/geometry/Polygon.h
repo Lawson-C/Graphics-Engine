@@ -2,17 +2,29 @@
 
 #include <matrixmath>
 
+#include "../display/Color.h"
+
 class Polygon
 {
 private:
-    Vector3 *Point;
+    Vector3 normal;
+    Vector3 *point;
+    color_t *texture;
 
 public:
-    inline Polygon(double data[9]) : Point(new Vector3[]{Vector3(data), Vector3(data + 3), Vector3(data + 6)}) {}
-    inline Polygon(double data[3][3]) : Point(new Vector3[]{Vector3(data[0]), Vector3(data[1]), Vector3(data[2])}) {}
-    inline Polygon(Vector3 points[3]) : Point(new Vector3[]{points[0], points[1], points[2]}) {}
-    inline Polygon(Vector3 &point0, Vector3 &point1, Vector3 &point2) : Point(new Vector3[]{point0, point1, point2}) {}
-    inline ~Polygon() { delete[] Point; }
+    inline Polygon(double data[9], color_t color0, color_t color1, color_t color2);
+    inline Polygon(double data[3][3], color_t color0, color_t color1, color_t color2);
+    inline Polygon(Vector3 points[3], color_t color0, color_t color1, color_t color2);
+    inline Polygon(Vector3 &point0, Vector3 &point1, Vector3 &point2, color_t color0, color_t color1, color_t color2);
+    inline ~Polygon();
+
+    color_t get_color(Vector3 &point);
+    color_t get_color(double x, double y, double z);
+
+    void set_normal(Vector3 &normal);
+    void set_normal(double x, double y, double z);
+
+    void align_normal(int x, int y, int z);
 };
 
 typedef class Polygon polygon_t;
