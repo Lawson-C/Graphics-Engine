@@ -24,4 +24,7 @@ public:
     polylistitem_t *add(polygon_t *poly);
 
     void remove(polylistitem_t *pi);
+
+    void link_head(PolygonList *pi);
+    void link_tail(PolygonList *pi);
 };

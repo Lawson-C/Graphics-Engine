@@ -38,3 +38,21 @@ PolygonList::~PolygonList()
     delete head;
     delete tail;
 }
+
+// Links this list to another by replacing the head of this list with the tail of the other list
+void PolygonList::link_head(PolygonList *list)
+{
+    list->tail->next = head->next;
+    head->next->prev = list->tail;
+    delete head;
+    head = list->tail;
+}
+
+// Links this list to another by replacing the tail of this list with the head of the other list
+void PolygonList::link_tail(PolygonList *list)
+{
+    list->head->prev = tail;
+    tail->prev->next = list->head;
+    delete tail;
+    tail = list->head;
+}
