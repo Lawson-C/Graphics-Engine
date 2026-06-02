@@ -1,8 +1,9 @@
 #include "Engine.h"
 
-Engine::Engine()
+Engine::Engine(Window *window)
 {
     global_mesh = new PolygonList{};
+    window = window;
 }
 
 Engine::~Engine()
@@ -10,9 +11,13 @@ Engine::~Engine()
 	delete global_mesh;
 }
 
+void Engine::add_mesh(Mesh *m)
+{
+    global_mesh->link_tail(m->polychain);
+}
+
 void Engine::render_scene()
 {
-    Window *window = get_instance().render_target;
     window->background({0x000000});
 
     for (int y = 0; y < window->height; y++)
