@@ -1,48 +1,26 @@
 #include "Polygon.h"
 
-Polygon::Polygon(double data[9], color_t color0, color_t color1, color_t color2) : point(new Vector3[]{Vector3(data), Vector3(data + 3), Vector3(data + 6)}),
-                                                                                   texture(new color_t[]{color0, color1, color2})
+Polygon::Polygon(Vector3 *p0, Vector3 *p1, Vector3 *p2, color_t color0, color_t color1, color_t color2)
 {
-    Vector3 v0 = point[1] - point[0];
-    Vector3 v1 = point[2] - point[0];
-    normal = (v0).cross(v1).normalize();
-}
+    point[0].vector = p0;
+    point[1].vector = p1;
+    point[2].vector = p2;
 
-Polygon::Polygon(double data[3][3], color_t color0, color_t color1, color_t color2) : point(new Vector3[]{Vector3(data[0]), Vector3(data[1]), Vector3(data[2])}),
-                                                                                      texture(new color_t[]{color0, color1, color2})
-{
-    Vector3 v0 = point[1] - point[0];
-    Vector3 v1 = point[2] - point[0];
-    normal = (v0).cross(v1).normalize();
-}
-
-Polygon::Polygon(Vector3 points[3], color_t color0, color_t color1, color_t color2) : point(new Vector3[]{points[0], points[1], points[2]}),
-                                                                                      texture(new color_t[]{color0, color1, color2})
-{
-    Vector3 v0 = point[1] - point[0];
-    Vector3 v1 = point[2] - point[0];
-    normal = (v0).cross(v1).normalize();
-}
-
-Polygon::Polygon(Vector3 &point0, Vector3 &point1, Vector3 &point2, color_t color0, color_t color1, color_t color2) : point(new Vector3[]{point0, point1, point2}),
-                                                                                                                      texture(new color_t[]{color0, color1, color2})
-{
-    Vector3 v0 = point[1] - point[0];
-    Vector3 v1 = point[2] - point[0];
-    normal = (v0).cross(v1).normalize();
+    point[0].color = color0;
+    point[1].color = color1;
+    point[2].color = color2;
 }
 
 Polygon::~Polygon()
 {
     delete[] point;
-    delete[] texture;
 }
 
-color_t Polygon::get_color(Vector3 &point)
+color_t Polygon::get_color(Vector3 &p)
 {
-    Vector3 v0 = this->point[1] - this->point[0];
-    Vector3 v1 = this->point[2] - this->point[0];
-    Vector3 v2 = point - this->point[0];
+    Vector3 v0 = *(point[1].vector) - *(point[0].vector);
+    Vector3 v1 = *(point[2].vector) - *(point[0].vector);
+    Vector3 v2 = p - *(point[0].vector);
 
     double d00 = v0 * v0;
     double d01 = v0 * v1;
@@ -56,18 +34,7 @@ color_t Polygon::get_color(Vector3 &point)
     double w = (d00 * d21 - d01 * d20) * factor;
     double u = 1.0 - v - w;
 
-    return u * texture[0] + v * texture[1] + w * texture[2];
-}
-
-color_t Polygon::get_color(double x, double y, double z)
-{
-    Vector3 p(x, y, z);
-    return get_color(p);
-}
-
-void Polygon::set_normal(Vector3 &normal)
-{
-    set_normal(normal.x, normal.y, normal.z);
+    return u * point[0].color + v * point[1].color + w * point[2].color;
 }
 
 void Polygon::set_normal(double x, double y, double z)
