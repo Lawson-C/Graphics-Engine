@@ -12,7 +12,7 @@ struct Polygon
     {
         Vector3 *vector;
         color_t color;
-    } point[3];
+    } vertices[3];
 
     inline Polygon(Vector3 *p0, Vector3 *p1, Vector3 *p2, color_t color0, color_t color1, color_t color2);
     inline ~Polygon();
