@@ -1,3 +1,5 @@
+#pragma once
+
 #define _USE_MATH_DEFINES
 
 #include <cmath>
@@ -5,10 +7,14 @@
 #include <matrixmath>
 
 #include "Color.h"
+#include "Fragment.h"
+#include "Engine.h"
 
 class Camera
 {
 private:
+    Engine *engine;
+
     int width = 1920, height = 1080;
 
     Vector3 position;
@@ -21,9 +27,12 @@ private:
     Matrix44 projection_transform;
     Matrix44 viewport_transform;
 
+    Fragment **color_buffer;
+    Fragment ***depth_buffer;
+
 public:
-    Camera(Vector3 position);
-    Camera(double x, double y, double z);
+    Camera(Engine *engine, Vector3 position);
+    Camera(Engine *engine, double x, double y, double z);
 
     inline int get_width() { return width; }
     inline int get_height() { return height; }
@@ -55,4 +64,10 @@ public:
     Matrix44 &update_viewport_transform();
 
     Vector4 translate_to_screen_space(Vector3 &point);
+
+    Fragment **get_color_buffer() { return color_buffer; }
+    Fragment **update_color_buffer();
+
+    Fragment ***get_depth_buffer() { return depth_buffer; }
+    Fragment ***update_depth_buffer();
 };

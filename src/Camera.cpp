@@ -1,13 +1,13 @@
 #include "Camera.h"
 
-Camera::Camera(double x, double y, double z) : position(Vector3(x, y, z)), yaw(0), pitch(0), roll(0)
+Camera::Camera(Engine *engine, double x, double y, double z) : engine(engine), position(Vector3(x, y, z)), yaw(0), pitch(0), roll(0)
 {
     update_view_matrix();
     update_projection_matrix(0.1, 1000, -1, 1, 1, -1);
     update_viewport_transform();
 }
 
-Camera::Camera(Vector3 pos) : position(Vector3(pos.x, pos.y, pos.z)), yaw(0), pitch(0), roll(0)
+Camera::Camera(Engine *engine, Vector3 pos) : engine(engine), position(Vector3(pos.x, pos.y, pos.z)), yaw(0), pitch(0), roll(0)
 {
     update_view_matrix();
     update_projection_matrix(0.1, 1000, -1, 1, 1, -1);
