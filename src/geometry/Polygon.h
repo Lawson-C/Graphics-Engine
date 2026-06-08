@@ -4,18 +4,16 @@
 
 #include "../display/Color.h"
 
-class Polygon
+struct Polygon
 {
-private:
+    Vector3 normal;
+
     struct
     {
         Vector3 *vector;
         color_t color;
     } point[3];
 
-    Vector3 normal;
-
-public:
     inline Polygon(Vector3 *p0, Vector3 *p1, Vector3 *p2, color_t color0, color_t color1, color_t color2);
     inline ~Polygon();
 
@@ -33,6 +31,5 @@ public:
     };
 
     void realign_normal(int x, int y, int z);
-};
 
-typedef class Polygon polygon_t;
+} typedef polygon_t;
