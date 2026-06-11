@@ -6,16 +6,19 @@
 class Mesh
 {
 private:
-    int poly_count;
     polygonlist_t *polychain;
-
-    friend class Engine;
+    vertexlist_t *vertexchain;
 
 public:
-    Mesh() { *(polychain) = {}; }
+    Mesh();
+    ~Mesh();
 
-    inline void add_polygon(polygon_t *poly) { polychain->add(poly); }
+    void add_polygon(polygon_t *poly) { polychain->add(poly); };
+    void add_vertex(vertex_t *vertex) { vertexchain->add(vertex); }
 
-    inline polylistitem_t *get_head() { return polychain->head; };
-    inline polylistitem_t *get_tail() { return polychain->tail; };
+    inline polylistitem_t *get_mesh_head() { return polychain->head; };
+    inline polylistitem_t *get_mesh_tail() { return polychain->tail; };
+
+    inline vertexlistitem_t *get_vertex_head() { return vertexchain->head; };
+    inline vertexlistitem_t *get_vertex_tail() { return vertexchain->tail; };
 };
