@@ -9,7 +9,7 @@
 template <typename T>
 struct ListItem
 {
-    T *polygon;
+    T *item;
     ListItem *next;
     ListItem *prev;
 };
@@ -42,8 +42,19 @@ public:
         {
             remove(head->next);
         }
-        delete head;
-        delete tail;
+        if (head->prev)
+        {
+            remove(tail);
+        }
+        else if (tail->next)
+        {
+            remove(head);
+        }
+        else
+        {
+            delete head;
+            delete tail;
+        }
     }
 
     T *add(T *poly)
