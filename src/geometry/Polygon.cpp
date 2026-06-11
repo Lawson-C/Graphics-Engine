@@ -9,18 +9,18 @@ Polygon::Polygon(Vertex *v0, Vertex*v1, Vertex *v2)
 
 Polygon::Polygon(Vector3 *p0, Vector3 *p1, Vector3 *p2, color_t color0, color_t color1, color_t color2)
 {
-    vertices[0] = new Vertex {
+    vertices[0] = new vertex_t {
         .vector = p0,
         .color = color0,
         .screen_space = 0
     };
-    vertices[1] = new Vertex {
+    vertices[1] = new vertex_t {
         .vector = p0,
         .color = color0,
         .screen_space = 0
     };
     
-    vertices[2] = new Vertex {
+    vertices[2] = new vertex_t {
         .vector = p0,
         .color = color0,
         .screen_space = 0
@@ -37,9 +37,9 @@ Polygon::~Polygon()
 
 color_t Polygon::get_color(Vector3 &p)
 {
-    Vector3 v0 = *(vertices[1].vector) - *(vertices[0].vector);
-    Vector3 v1 = *(vertices[2].vector) - *(vertices[0].vector);
-    Vector3 v2 = p - *(vertices[0].vector);
+    Vector3 v0 = *(get_vertex(1).vector) - *(get_vertex(0).vector);
+    Vector3 v1 = *(get_vertex(2).vector) - *(get_vertex(0).vector);
+    Vector3 v2 = p - *(get_vertex(0).vector);
 
     double d00 = v0 * v0;
     double d01 = v0 * v1;
@@ -53,7 +53,7 @@ color_t Polygon::get_color(Vector3 &p)
     double w = (d00 * d21 - d01 * d20) * factor;
     double u = 1.0 - v - w;
 
-    return u * vertices[0].color + v * vertices[1].color + w * vertices[2].color;
+    return u * get_vertex(0).color + v * get_vertex(1).color + w * get_vertex(2).color;
 }
 
 void Polygon::set_normal(double x, double y, double z)
