@@ -9,6 +9,7 @@
 #include "Color.h"
 #include "Fragment.h"
 #include "Engine.h"
+#include "PolygonList.h"
 
 class Camera
 {
@@ -28,11 +29,30 @@ private:
     Matrix44 viewport_transform;
 
     Fragment **color_buffer;
-    Fragment ***depth_buffer;
+    struct DepthElement
+    {
+        Fragment *fragment;
+        DepthElement *next;
+    } *depth_buffer;
+
+    Fragment **reset_color_buffer()
+    {
+        if (color_buffer)
+            free(color_buffer);
+        return color_buffer = (Fragment**) malloc(width * height * sizeof(Fragment *));
+    };
+
+    DepthElement *reset_depth_buffer()
+    {
+        if (depth_buffer)
+            free(depth_buffer);
+        return depth_buffer = (DepthElement*) malloc(width * height * sizeof(DepthElement));
+    };
 
 public:
     Camera(Engine *engine, Vector3 position);
     Camera(Engine *engine, double x, double y, double z);
+    ~Camera();
 
     inline int get_width() { return width; }
     inline int get_height() { return height; }
@@ -63,11 +83,11 @@ public:
     Matrix44 &get_viewport_transform() { return viewport_transform; }
     Matrix44 &update_viewport_transform();
 
-    Vector4 translate_to_screen_space(Vector3 &point);
+    Fragment *create_fragment(Vector3 &point);
 
     Fragment **get_color_buffer() { return color_buffer; }
-    Fragment **update_color_buffer();
+    Fragment **update_color_buffer(PolygonList *polygon_list);
 
-    Fragment ***get_depth_buffer() { return depth_buffer; }
-    Fragment ***update_depth_buffer();
+    DepthElement *get_depth_buffer() { return depth_buffer; }
+    DepthElement *update_depth_buffer(PolygonList *polygon_list);
 };
