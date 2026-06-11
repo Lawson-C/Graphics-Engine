@@ -1,8 +1,7 @@
 #include "Engine.h"
 
-Engine::Engine(Window *window)
+Engine::Engine(Window *window) : global_mesh()
 {
-    global_mesh = new PolygonList{};
     window = window;
 }
 

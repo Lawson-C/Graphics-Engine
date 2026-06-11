@@ -1,5 +1,6 @@
 #pragma once
 
+#include "List.h"
 #include "geometry/Mesh.h"
 #include "display/Window.h"
 
@@ -16,7 +17,7 @@ public:
 
 private:
     // linkedlist containing all polygons
-    PolygonList *global_mesh;
+    polygonlist_t *global_mesh;
 
     Window *window;
 };

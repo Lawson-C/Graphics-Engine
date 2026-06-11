@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Polygon.h"
-#include "PolygonList.h"
+#include "List.h"
 
 class Mesh
 {
 private:
     int poly_count;
-    PolygonList *polychain;
+    polygonlist_t *polychain;
 
     friend class Engine;
 

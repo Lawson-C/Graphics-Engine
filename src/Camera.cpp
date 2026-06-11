@@ -109,7 +109,7 @@ void Camera::create_fragments(polygon_t &polygon) {
 
 }
 
-Fragment **Camera::update_color_buffer(PolygonList *polygon_list)
+Fragment **Camera::update_color_buffer(polygonlist_t *polygon_list)
 {
     if (!color_buffer)
         color_buffer = (Fragment **)malloc(width * height * sizeof(Fragment *));
