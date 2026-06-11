@@ -9,6 +9,7 @@
 #include "Color.h"
 #include "Fragment.h"
 #include "Engine.h"
+#include "Polygon.h"
 #include "PolygonList.h"
 
 class Camera
@@ -27,6 +28,8 @@ private:
     Matrix44 view_transform;
     Matrix44 projection_transform;
     Matrix44 viewport_transform;
+
+    PolygonList screen_space;
 
     Fragment **color_buffer;
     struct DepthElement
@@ -83,7 +86,10 @@ public:
     Matrix44 &get_viewport_transform() { return viewport_transform; }
     Matrix44 &update_viewport_transform();
 
-    Fragment *create_fragment(Vector3 &point);
+    PolygonList *convert_to_screen_space(PolygonList &mesh);
+    Vector3 *convert_to_screen_space(Vector3 &polygon);
+    polygon_t *convert_to_screen_space(polygon_t &polygon);
+    void create_fragments(polygon_t &polygon);
 
     Fragment **get_color_buffer() { return color_buffer; }
     Fragment **update_color_buffer(PolygonList *polygon_list);

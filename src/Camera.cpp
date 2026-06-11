@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-Camera::Camera(Engine *engine, double x, double y, double z) : engine(engine), position(Vector3(x, y, z)), yaw(0), pitch(0), roll(0)
+Camera::Camera(Engine *engine, double x, double y, double z) : engine(engine), screen_space(), position(Vector3(x, y, z)), yaw(0), pitch(0), roll(0)
 {
     update_view_matrix();
     update_projection_matrix(0.1, 1000, -1, 1, 1, -1);
@@ -9,7 +9,7 @@ Camera::Camera(Engine *engine, double x, double y, double z) : engine(engine), p
     reset_depth_buffer();
 }
 
-Camera::Camera(Engine *engine, Vector3 pos) : engine(engine), position(Vector3(pos.x(), pos.y(), pos.z())), yaw(0), pitch(0), roll(0)
+Camera::Camera(Engine *engine, Vector3 pos) : engine(engine), screen_space(), position(Vector3(pos.x(), pos.y(), pos.z())), yaw(0), pitch(0), roll(0)
 {
     update_view_matrix();
     update_projection_matrix(0.1, 1000, -1, 1, 1, -1);
@@ -86,7 +86,7 @@ Matrix44 &Camera::update_viewport_transform()
                0, 0, 0, 1});
 }
 
-Fragment *Camera::create_fragment(Vector3 &point)
+Vector3 *Camera::convert_to_screen_space(Vector3 &point)
 {
     Vector4 point4d = Vector4(point.x(), point.y(), point.z(), 1);
     Vector4 view_space_point = view_transform * point4d;
@@ -96,10 +96,17 @@ Fragment *Camera::create_fragment(Vector3 &point)
         clip_space_point /= clip_space_point.w();
     }
     Vector4 screen_space_point = viewport_transform * clip_space_point;
-    return new Fragment{
-        .x = (int)screen_space_point.x(),
-        .y = (int)screen_space_point.y(),
-        .z = screen_space_point.z()};
+    return new Vector3((int)screen_space_point.x(),
+                       (int)screen_space_point.y(),
+                       screen_space_point.z());
+}
+
+polygon_t *Camera::convert_to_screen_space(polygon_t &polygon)
+{
+}
+
+void Camera::create_fragments(polygon_t &polygon) {
+
 }
 
 Fragment **Camera::update_color_buffer(PolygonList *polygon_list)
@@ -110,9 +117,9 @@ Fragment **Camera::update_color_buffer(PolygonList *polygon_list)
     {
         if (current->polygon == nullptr)
             continue;
-        Fragment &point0 = *create_fragment(*(current->polygon->vertices[0].vector));
-        Fragment &point1 = *create_fragment(*(current->polygon->vertices[1].vector));
-        Fragment &point2 = *create_fragment(*(current->polygon->vertices[2].vector));
+        Fragment &point0 = *convert_to_screen_space(*(current->polygon->vertices[0].vector));
+        Fragment &point1 = *convert_to_screen_space(*(current->polygon->vertices[1].vector));
+        Fragment &point2 = *convert_to_screen_space(*(current->polygon->vertices[2].vector));
         Vector2 vertices[] = {
             Vector2(point0.x, point0.y),
             Vector2(point1.x, point1.y),
@@ -136,13 +143,11 @@ Fragment **Camera::update_color_buffer(PolygonList *polygon_list)
                 pix + (e *= j);
                 if (pix.x() >= 0 && pix.x() > width && pix.y() >= 0 && pix.y() < height)
                 {
-                    color_buffer[(int)pix.x() * height + (int)pix.y()] = new Fragment
-                    {
+                    color_buffer[(int)pix.x() * height + (int)pix.y()] = new Fragment{
                         .x = (int)pix.x(),
                         .y = (int)pix.y(),
                         .z = 0,
-                        .color = current->polygon->get_color(pix.x(), pix.y(), 0)
-                    };
+                        .color = current->polygon->get_color(pix.x(), pix.y(), 0)};
                 }
                 e /= j;
             }
