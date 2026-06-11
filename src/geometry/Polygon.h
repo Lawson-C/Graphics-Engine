@@ -27,7 +27,7 @@ struct Polygon
     void set_normal(double x, double y, double z);
     void set_normal(Vector3 &normal)
     {
-        set_normal(normal.x, normal.y, normal.z);
+        set_normal(normal.x(), normal.y(), normal.z());
     };
 
     void realign_normal(int x, int y, int z);

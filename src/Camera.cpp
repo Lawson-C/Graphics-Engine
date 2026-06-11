@@ -9,7 +9,7 @@ Camera::Camera(Engine *engine, double x, double y, double z) : engine(engine), p
     reset_depth_buffer();
 }
 
-Camera::Camera(Engine *engine, Vector3 pos) : engine(engine), position(Vector3(pos.x, pos.y, pos.z)), yaw(0), pitch(0), roll(0)
+Camera::Camera(Engine *engine, Vector3 pos) : engine(engine), position(Vector3(pos.x(), pos.y(), pos.z())), yaw(0), pitch(0), roll(0)
 {
     update_view_matrix();
     update_projection_matrix(0.1, 1000, -1, 1, 1, -1);
@@ -62,9 +62,9 @@ Matrix44 &Camera::update_view_matrix()
     double Y[3] = {-cos_yaw * sin_roll + sin_pitch * sin_yaw * cos_roll, cos_pitch * cos_roll, sin_yaw * sin_roll + sin_pitch * cos_yaw * cos_roll};
     double Z[3] = {-cos_pitch * sin_yaw, sin_pitch, -cos_yaw * cos_pitch};
     return view_transform = Matrix44(new double[16]{
-               X[0], X[1], X[2], -(X[0] * position.x + X[1] * position.y + X[2] * position.z),
-               Y[0], Y[1], Y[2], -(Y[0] * position.x + Y[1] * position.y + Y[2] * position.z),
-               Z[0], Z[1], Z[2], -(Z[0] * position.x + Z[1] * position.y + Z[2] * position.z),
+               X[0], X[1], X[2], -(X[0] * position.x() + X[1] * position.y() + X[2] * position.z()),
+               Y[0], Y[1], Y[2], -(Y[0] * position.x() + Y[1] * position.y() + Y[2] * position.z()),
+               Z[0], Z[1], Z[2], -(Z[0] * position.x() + Z[1] * position.y() + Z[2] * position.z()),
                0, 0, 0, 1});
 }
 
@@ -88,20 +88,18 @@ Matrix44 &Camera::update_viewport_transform()
 
 Fragment *Camera::create_fragment(Vector3 &point)
 {
-    Vector4 point4d = Vector4(point.x, point.y, point.z, 1);
+    Vector4 point4d = Vector4(point.x(), point.y(), point.z(), 1);
     Vector4 view_space_point = view_transform * point4d;
     Vector4 clip_space_point = projection_transform * view_space_point;
-    if (clip_space_point.w != 0)
+    if (clip_space_point.w() != 0)
     {
-        clip_space_point.x /= clip_space_point.w;
-        clip_space_point.y /= clip_space_point.w;
-        clip_space_point.z /= clip_space_point.w;
+        clip_space_point /= clip_space_point.w();
     }
     Vector4 screen_space_point = viewport_transform * clip_space_point;
     return new Fragment{
-        .x = (int)screen_space_point.x,
-        .y = (int)screen_space_point.y,
-        .z = screen_space_point.z};
+        .x = (int)screen_space_point.x(),
+        .y = (int)screen_space_point.y(),
+        .z = screen_space_point.z()};
 }
 
 Fragment **Camera::update_color_buffer(PolygonList *polygon_list)
@@ -136,14 +134,14 @@ Fragment **Camera::update_color_buffer(PolygonList *polygon_list)
             {
                 Vector2 pix = vertices[0] + u;
                 pix + (e *= j);
-                if (pix.x >= 0 && pix.x > width && pix.y >= 0 && pix.y < height)
+                if (pix.x() >= 0 && pix.x() > width && pix.y() >= 0 && pix.y() < height)
                 {
-                    color_buffer[(int)pix.x * height + (int)pix.y] = new Fragment
+                    color_buffer[(int)pix.x() * height + (int)pix.y()] = new Fragment
                     {
-                        .x = (int)pix.x,
-                        .y = (int)pix.y,
+                        .x = (int)pix.x(),
+                        .y = (int)pix.y(),
                         .z = 0,
-                        .color = current->polygon->get_color(pix.x, pix.y, 0);
+                        .color = current->polygon->get_color(pix.x(), pix.y(), 0)
                     };
                 }
                 e /= j;

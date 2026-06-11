@@ -39,15 +39,15 @@ color_t Polygon::get_color(Vector3 &p)
 
 void Polygon::set_normal(double x, double y, double z)
 {
-    normal.x = x;
-    normal.y = y;
-    normal.z = z;
+    normal.x() = x;
+    normal.y() = y;
+    normal.z() = z;
     normal.normalize();
 }
 
 void Polygon::realign_normal(int x, int y, int z)
 {
-    normal.x *= (x >> 31) | 1;
-    normal.y *= (y >> 31) | 1;
-    normal.z *= (z >> 31) | 1;
+    normal.x() *= (x >> 31) | 1;
+    normal.y() *= (y >> 31) | 1;
+    normal.z() *= (z >> 31) | 1;
 }
