@@ -1,18 +1,37 @@
 #include "Polygon.h"
 
+Polygon::Polygon(Vertex *v0, Vertex*v1, Vertex *v2)
+{
+    vertices[0] = v0;
+    vertices[1] = v1;
+    vertices[2] = v2;
+}
+
 Polygon::Polygon(Vector3 *p0, Vector3 *p1, Vector3 *p2, color_t color0, color_t color1, color_t color2)
 {
-    vertices[0].vector = p0;
-    vertices[1].vector = p1;
-    vertices[2].vector = p2;
-
-    vertices[0].color = color0;
-    vertices[1].color = color1;
-    vertices[2].color = color2;
+    vertices[0] = new Vertex {
+        .vector = p0,
+        .color = color0,
+        .screen_space = 0
+    };
+    vertices[1] = new Vertex {
+        .vector = p0,
+        .color = color0,
+        .screen_space = 0
+    };
+    
+    vertices[2] = new Vertex {
+        .vector = p0,
+        .color = color0,
+        .screen_space = 0
+    };
 }
 
 Polygon::~Polygon()
 {
+    delete vertices[0];
+    delete vertices[1];
+    delete vertices[2];
     delete[] vertices;
 }
 
