@@ -1,6 +1,6 @@
 #include "Polygon.h"
 
-Polygon::Polygon(Vertex *v0, Vertex*v1, Vertex *v2)
+Polygon::Polygon(Vertex *v0, Vertex *v1, Vertex *v2)
 {
     vertices[0] = v0;
     vertices[1] = v1;
@@ -9,30 +9,29 @@ Polygon::Polygon(Vertex *v0, Vertex*v1, Vertex *v2)
 
 Polygon::Polygon(Vector3 *p0, Vector3 *p1, Vector3 *p2, color_t color0, color_t color1, color_t color2)
 {
-    vertices[0] = new vertex_t {
+    vertices[0] = new vertex_t{
         .vector = p0,
         .color = color0,
-        .screen_space = 0
-    };
-    vertices[1] = new vertex_t {
+        .screen_space = 0};
+    vertices[1] = new vertex_t{
         .vector = p0,
         .color = color0,
-        .screen_space = 0
-    };
-    
-    vertices[2] = new vertex_t {
+        .screen_space = 0};
+
+    vertices[2] = new vertex_t{
         .vector = p0,
         .color = color0,
-        .screen_space = 0
-    };
+        .screen_space = 0};
 }
 
 Polygon::~Polygon()
 {
-    delete vertices[0];
-    delete vertices[1];
-    delete vertices[2];
-    delete[] vertices;
+    if (vertices[0])
+        delete vertices[0];
+    if (vertices[0])
+        delete vertices[1];
+    if (vertices[0])
+        delete vertices[2];
 }
 
 color_t Polygon::get_color(Vector3 &p)
