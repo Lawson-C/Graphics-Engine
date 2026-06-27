@@ -1,8 +1,5 @@
 #pragma once
 
-#include <matrixmath>
-
-#include "Color.h"
 #include "Vertex.h"
 
 #include "../display/Color.h"

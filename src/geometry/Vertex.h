@@ -2,7 +2,7 @@
 
 #include <matrixmath>
 
-#include "Color.h"
+#include "../display/Color.h"
 
 struct Vertex
 {

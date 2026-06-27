@@ -1,7 +1,9 @@
+#pragma once
+
 #include <string>
 #include <stb_image.h>
 
-#include "color.h"
+#include "Color.h"
 
 typedef class Texture
 {
