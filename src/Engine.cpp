@@ -2,7 +2,7 @@
 
 Engine::Engine(Window *window) : global_mesh()
 {
-    window = window;
+    this->window = window;
 }
 
 Engine::~Engine()
@@ -10,9 +10,9 @@ Engine::~Engine()
 	delete global_mesh;
 }
 
-void Engine::add_mesh(Mesh *m)
+void Engine::add_mesh(Mesh &m)
 {
-    global_mesh->link_tail(m->polychain);
+    global_mesh->link_tail(m.polychain);
 }
 
 void Engine::render_scene()

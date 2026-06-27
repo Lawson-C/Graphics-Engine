@@ -2,8 +2,4 @@
 
 Mesh::Mesh() : polychain(), vertexchain() {}
 
-Mesh::~Mesh()
-{
-    delete vertexchain;
-    delete polychain;
-}
+Mesh::~Mesh() {}

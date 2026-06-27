@@ -11,7 +11,7 @@ public:
 
     ~Engine();
 
-    void add_mesh(Mesh *m);
+    void add_mesh(Mesh &m);
 
     void render_scene();
 
