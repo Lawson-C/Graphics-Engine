@@ -2,7 +2,6 @@
 
 #include "display/Window.h"
 #include "display/Color.h"
-#include "geometry/Polygon.h"
 #include "Engine.h"
 
 Window *render_window;
@@ -13,7 +12,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 int main()
 {
     render_window = new Window("Software Renderer", 800, 800);
-    engine->attach_window(render_window);
+    engine = new Engine(render_window);
 
     int &width = render_window->width;
     int &height = render_window->height;
