@@ -115,15 +115,15 @@ Fragment **Camera::update_color_buffer(polygonlist_t *polygon_list)
         color_buffer = (Fragment **)malloc(width * height * sizeof(Fragment *));
     for (polylistitem_t *current = polygon_list->head; current->next; current = current->next)
     {
-        if (current->polygon == nullptr)
+        if (current->item == nullptr)
             continue;
-        Fragment &point0 = *convert_to_screen_space(*(current->polygon->vertices[0].vector));
-        Fragment &point1 = *convert_to_screen_space(*(current->polygon->vertices[1].vector));
-        Fragment &point2 = *convert_to_screen_space(*(current->polygon->vertices[2].vector));
+        Vector3 &point0 = *convert_to_screen_space(*(current->item->vertices[0]->vector));
+        Vector3 &point1 = *convert_to_screen_space(*(current->item->vertices[1]->vector));
+        Vector3 &point2 = *convert_to_screen_space(*(current->item->vertices[2]->vector));
         Vector2 vertices[] = {
-            Vector2(point0.x, point0.y),
-            Vector2(point1.x, point1.y),
-            Vector2(point2.x, point2.y)};
+            Vector2(point0.x(), point0.y()),
+            Vector2(point1.x(), point1.y()),
+            Vector2(point2.x(), point2.y())};
         Vector2 upper = vertices[1] - vertices[0];
         Vector2 lower = vertices[2] - vertices[0];
         double u_len = upper.magnitude();
@@ -147,7 +147,7 @@ Fragment **Camera::update_color_buffer(polygonlist_t *polygon_list)
                         .x = (int)pix.x(),
                         .y = (int)pix.y(),
                         .z = 0,
-                        .color = current->polygon->get_color(pix.x(), pix.y(), 0)};
+                        .color = current->item->get_color(pix.x(), pix.y(), 0)};
                 }
                 e /= j;
             }
