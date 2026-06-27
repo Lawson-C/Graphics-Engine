@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Vertex.h"
-#include "Polygon.h"
+#include "geometry/Polygon.h"
 
 /*
  * Each mesh is a linkedlist of polygons, which is a subsets of the engine's global mesh
@@ -9,13 +8,13 @@
 template <typename T>
 struct ListItem
 {
-    T *item;
+    T item;
     ListItem *next;
     ListItem *prev;
 };
 
-typedef ListItem<polygon_t> polylistitem_t;
-typedef ListItem<vertex_t> vertexlistitem_t;
+typedef ListItem<polygon_t *> polylistitem_t;
+typedef ListItem<vertex_t *> vertexlistitem_t;
 
 template <typename T>
 class List
@@ -27,11 +26,9 @@ public:
     List()
     {
         head = new ListItem<T>{
-            .polygon = nullptr,
             .next = tail,
             .prev = nullptr};
         tail = new ListItem<T>{
-            .polygon = nullptr,
             .next = nullptr,
             .prev = head};
     }
@@ -57,15 +54,15 @@ public:
         }
     }
 
-    T *add(T *poly)
+    T *add(T item)
     {
         ListItem<T> *pi = new ListItem<T>{
-            .polygon = poly,
+            .item = item,
             .next = tail,
             .prev = tail->prev};
         tail->prev->next = pi;
         tail->prev = pi;
-        return pi;
+        return &pi->item;
     }
 
     void remove(ListItem<T> *pi)
@@ -74,22 +71,22 @@ public:
         delete pi;
     }
 
-    void link_head(List<T> *pi)
+    void link_head(List<T> &list)
     {
-        list->tail->next = head->next;
-        head->next->prev = list->tail;
+        list.tail->next = head->next;
+        head->next->prev = list.tail;
         delete head;
-        head = list->tail;
+        head = list.tail;
     }
 
-    void link_tail(List<T> *pi)
+    void link_tail(List<T> &list)
     {
-        list->head->prev = tail;
-        tail->prev->next = list->head;
+        list.head->prev = tail;
+        tail->prev->next = list.head;
         delete tail;
-        tail = list->head;
+        tail = list.head;
     }
 };
 
-typedef List<polygon_t> polygonlist_t;
-typedef List<vertex_t> vertexlist_t;
+typedef List<polygon_t *> polygonlist_t;
+typedef List<vertex_t *> vertexlist_t;
