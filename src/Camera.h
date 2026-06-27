@@ -4,12 +4,11 @@
 
 #include <cmath>
 #include <algorithm>
-#include <matrixmath>
 
-#include "Color.h"
-#include "Fragment.h"
+#include "display/Color.h"
+#include "display/Fragment.h"
 #include "Engine.h"
-#include "Polygon.h"
+#include "geometry/Polygon.h"
 #include "List.h"
 
 class Camera
